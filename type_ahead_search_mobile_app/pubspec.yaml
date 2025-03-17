@@ -1,29 +1,46 @@
 name: type_ahead_search_mobile_app
-description: "A new Flutter project."
-publish_to: 'none'
-version: 0.1.0
+description: A Flutter application to search for events using the SeatGeek API.
+version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.2
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  get:
-  dio:
-  cached_network_image:
-  get_storage:
-  intl: 
-  flutter_dotenv: ^5.2.1 
-  flutter_typeahead:   
-
-
+  
+  # State management and dependency injection
+  get: ^4.6.5
+  
+  # Local storage
+  get_storage: ^2.1.1
+  
+  # Network
+  dio: ^5.1.1
+  
+  # UI
+  intl: ^0.18.0
+  
+  # Functional programming
+  dartz: ^0.10.1
+  
+  # Value equality
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^2.0.1
+  flutter_native_splash: ^2.2.16
 
 flutter:
   uses-material-design: true
+
+# This leads to optimize app launch time
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/splash.png
+  android: true
+  ios: true
+  web: false
