@@ -1,21 +1,24 @@
 # SeatGeek Event Finder App
 
+
 ## Features
 
-- **Type-ahead search**: Real-time search results as you type
-- **Event listings**: Clean, efficient list of events with essential details
-- **Event details**: Comprehensive view of event information
-- **Favorites**: Mark events as favorites with persistent storage
-- **Optimized performance**: Minimized rebuilds and efficient UI rendering
+- **Type-ahead Search with Suggestions**: Real-time search results and suggestions as you type
+- **In-memory Search Caching**: Cached search results for faster repeat searches
+- **Smart Suggestions**: Displays previous searches
+- **Favorites Func**: Mark events as favorites with persistent storage
+- **Detailed Event Information**: View of event details
+- **Optimized UI Performance**: Minimized rebuilds and efficient rendering
 
-## Simple UI Demonstration
+
 
 ### Search Screen
 
 
 The search screen features:
-- Custom app bar with search field
-- Real-time results list
+- Custom app bar with dynamic search field
+- Type-ahead suggestions from search history
+- Real-time results list with optimized rendering
 - Event cards with image, title, venue, date and favorite status
 
 ### Details Screen
@@ -25,7 +28,7 @@ The details screen displays:
 - Hero animation for smooth transitions
 - Event header with favorite toggle
 - Event image with parallax effect
-- Event details (date, venue, performers)
+- Comprehensive event details
 
 ## Architecture
 
@@ -38,14 +41,34 @@ lib/
 │   ├── data/              # Data layer (repositories, models)
 │   ├── domain/            # Domain layer (entities, use cases)
 │   ├── modules/           # Feature modules
+│   │   ├── search/        # Search module with type-ahead functionality
+│   │   └── details/       # Details screen module
 │   ├── routes/            # Navigation routes
 │   ├── services/          # App services
+│   │   ├── storage/       # Storage delegates (Facade pattern)
+│   │   └── connectivity/  # Network connectivity monitoring
 │   └── shared/            # Shared UI components
-├── test/                  # Unit and widget tests
-└── integration_test/      # End-to-end tests
 ```
 
-## UI Optimization Deep Dive
+## Suggestions & Search Results Caching
+
+### Suggestions
+The app provides smart suggestions to users as they type:
+
+- **Search History Based**: Shows the user's previous searches
+- **Real-time Filtering**: Filters suggestions as the user types
+
+
+
+### In-memory Search Results Caching
+To optimize performance and reduce network requests:
+
+- **Cache by Query**: Results are cached using the search query as the key
+- **Instant Retrieval**: Repeat searches load from cache first
+- **LRU Implementation**: Least Recently Used cache strategy
+- **Smart Invalidation**: Cache is selectively updated when favorites change
+
+## UI Optimization
 
 ### Minimizing Rebuilds
 
@@ -53,7 +76,6 @@ The app implements several techniques to minimize unnecessary widget rebuilds:
 
 1. **Granular Reactive State**
    ```dart
-   // Instead of one large observable state
    final RxList<Event> events = <Event>[].obs;
    final RxBool isLoading = false.obs;
    final RxString errorMessage = ''.obs;
@@ -66,52 +88,30 @@ The app implements several techniques to minimize unnecessary widget rebuilds:
    events.refresh(); // Updates only what changed
    ```
 
-3. **GetBuilder with IDs**
+3. **Proper Use of GetX Tools**
    ```dart
-   GetBuilder<SearchController>(
-     id: 'search_text', // Only updates this component when specifically triggered
+   // GetBuilder with IDs for targeted rebuilds
+   GetBuilder<TypeAheadSearchController>(
+     id: 'search_text', 
      builder: (_) => /* Widget */,
    )
    ```
 
-
-   ```
-
-### Memory Optimization
-
-
-### Efficient UI Structure
-
-1. **Slivers for Better Scrolling**
+4. **Stack for Overlay Elements**
    ```dart
-   CustomScrollView(
-     slivers: [
-       SliverAppBar(/* ... */),
-       SliverList(/* ... */),
+   // Favorite indicator implemented with Stack
+   Stack(
+     children: [
+       EventImage(/* ... */),
+       Positioned(
+         top: 4,
+         left: 4,
+         child: FavoriteIndicator(/* ... */),
+       ),
      ],
    )
    ```
 
-
-
-3. **AutomaticKeepAliveClientMixin**
-   ```dart
-   class _EventListItemState extends State<EventListItem> 
-       with AutomaticKeepAliveClientMixin {
-     // ...
-     @override
-     bool get wantKeepAlive => true;
-   }
-   ```
-
-4. **Shared Components**
-   ```dart
-   // Reusable across the app
-   FavoriteButton(
-     isFavorite: event.isFavorite,
-     onPressed: toggleFavorite,
-   )
-   ```
 
 ## Installation
 
@@ -126,14 +126,23 @@ The app implements several techniques to minimize unnecessary widget rebuilds:
    flutter pub get
    ```
 
+3. Update SeatGeek API Client ID
+   ```dart
+   // In lib/app/core/constants/api_constants.dart
+   static const String clientId = 'YOUR_CLIENT_ID';
+   ```
+
+4. Run the app
+   ```bash
+   flutter run
+   ```
 
 ## Testing
 
 The project includes comprehensive test coverage:
 
 - **Unit tests**: Repository and controller tests
-- **Widget tests**: UI component tests
-- **Integration tests**: End-to-end flow tests
+
 
 Run tests with:
 ```bash
@@ -143,3 +152,5 @@ flutter test
 # Integration tests
 flutter test integration_test/app_test.dart
 ```
+
+
