@@ -97,20 +97,6 @@ The app implements several techniques to minimize unnecessary widget rebuilds:
    )
    ```
 
-4. **Stack for Overlay Elements**
-   ```dart
-   // Favorite indicator implemented with Stack
-   Stack(
-     children: [
-       EventImage(/* ... */),
-       Positioned(
-         top: 4,
-         left: 4,
-         child: FavoriteIndicator(/* ... */),
-       ),
-     ],
-   )
-   ```
 
 
 ## Installation
