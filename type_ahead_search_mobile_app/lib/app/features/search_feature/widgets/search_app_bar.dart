@@ -18,40 +18,40 @@ class SearchBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      decoration: BoxDecoration(
-        color: Colors.blue.shade900,
+      decoration: const BoxDecoration(
+        color: Color(0xFF1A2639),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
+        
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
           // Search field
           Expanded(
             child: Container(
+             
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.white10,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextField(
                 controller: controller,
                 focusNode: focusNode,
                 textInputAction: TextInputAction.search,
+                
                 onSubmitted: onSubmitted,
                 decoration: InputDecoration(
+                
                   contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  prefixIcon: const Icon(Icons.search, color: Colors.white54),
                   hintText: 'Search events...',
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.white54),
                   border: InputBorder.none,
+                  
                   suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: Colors.grey),
+                        icon: const Icon(Icons.remove_circle_outline_sharp, color: Colors.grey),
                         onPressed: onClear,
                       )
                     : null,
